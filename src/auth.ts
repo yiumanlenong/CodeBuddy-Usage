@@ -212,6 +212,8 @@ async function readWindowsKey(localStatePath: string): Promise<Buffer | undefine
     // 用 -EncodedCommand（UTF-16LE + base64）传脚本，彻底规避引号转义问题
     const script = [
       "$ErrorActionPreference='Stop'",
+      // PS 5.1 不预载 System.Security 程序集，缺这行会报 TypeNotFound 导致 Windows 自动读取失败
+      "Add-Type -AssemblyName System.Security",
       `$b=[Convert]::FromBase64String('${protectedKey.toString("base64")}')`,
       "$k=[System.Security.Cryptography.ProtectedData]::Unprotect($b,$null,[System.Security.Cryptography.DataProtectionScope]::CurrentUser)",
       "[Console]::Out.Write([Convert]::ToBase64String($k))",

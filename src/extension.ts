@@ -214,7 +214,8 @@ async function fetchUsage(): Promise<UsageResult> {
     ProductCode: "p_tcaca",
     Status: [0, 3],
     OnlyValidPeriod: true,
-    PackageCodes: DEFAULT_PACKAGE_CODES,
+    // 全量口径：白名单会漏算不在 DEFAULT_PACKAGE_CODES 内的套餐（如 code_002 个人标准版），与官网数字不一致
+    PackageCodes: [],
     NeedInUsage: true,
   };
 
